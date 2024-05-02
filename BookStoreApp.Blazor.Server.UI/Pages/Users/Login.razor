@@ -1,15 +1,14 @@
 ﻿@page "/user/login"
 
+@inject NavigationManager navManager
 @inject IAuthenticationService authService
-
-<h3>Login</h3>
 
 <div>
     <EditForm Model="LoginModel" OnValidSubmit="HandleLogin">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
         <div class="form-group">
-            <label for="email">Email Address</label>
+            <label >Email Address</label>
             <InputText class="form-control" @bind-Value="LoginModel.Email"/>
             <ValidationMessage For="@(() => LoginModel.Email)" />
         </div>
@@ -19,6 +18,8 @@
             <InputText class="form-control" type="password" @bind-Value="LoginModel.Password"/>
             <ValidationMessage For="@(() => LoginModel.Password)" />
         </div>
+        <br/>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
     </EditForm>
 </div>
 
@@ -32,7 +33,7 @@
             var response = await authService.AuthenticateAsync(LoginModel);
             if (response)
             {
-
+                navManager.NavigateTo("/");
             }
             message = "Invalid Credentials, Please Try Again";
         }
