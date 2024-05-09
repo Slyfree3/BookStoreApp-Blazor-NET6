@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.18" />
     <PackageReference Include="MudBlazor" Version="6.19.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
-    <PackPackageReference Include=""AutoMapper.Extensions.MicroSoft>Deprend.sDependencyInjection></PackageReference>/ verVersion=""8.1.1
   </ItemGroup>
 
   <ItemGroup>

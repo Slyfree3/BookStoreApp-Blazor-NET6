@@ -8,7 +8,7 @@ namespace BookStoreApp.Blazor.Server.UI.Services
 
         Task<Response<AuthorReadOnlyDto>> GetAuthors(int id);
 
-        Task<Response<AuthorReadOnlyDto>> GetForUpdateAuthor(int id);
+        Task<Response<AuthorUpdateDto>> GetAuthorForUpdate(int id);
 
         Task<Response<int>> CreateAuthor(AuthorCreateDto author);
 

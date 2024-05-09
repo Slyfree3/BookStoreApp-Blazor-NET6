@@ -1,16 +1,18 @@
-﻿using Blazored.LocalStorage;
+﻿using AutoMapper;
+using Blazored.LocalStorage;
 using BookStoreApp.Blazor.Server.UI.Services.Base;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BookStoreApp.Blazor.Server.UI.Services
 {
     public class AuthorService : BaseHttpService, IAuthorService
     {
         private readonly IClient client;
+        private readonly IMapper mapper;
 
-        public AuthorService(IClient client, ILocalStorageService localStorage) : base(client, localStorage)
+        public AuthorService(IClient client, ILocalStorageService localStorage, IMapper mapper) : base(client, localStorage)
         {
             this.client = client;
+            this.mapper = mapper;
         }
 
         public async Task<Response<int>> CreateAuthor(AuthorCreateDto author)
@@ -87,24 +89,25 @@ namespace BookStoreApp.Blazor.Server.UI.Services
             return response;
         }
 
-        public async Task<Response<AuthorReadOnlyDto>> GetForUpdateAuthor(int id)
+        public async Task<Response<AuthorUpdateDto>> GetAuthorForUpdate(int id)
         {
-            Response<AuthorReadOnlyDto> response;
+            Response<AuthorUpdateDto> response;
 
             try
             {
                 await GetBearerToken();
                 var data = await client.AuthorsGETAsync(id);
-                response = new Response<AuthorReadOnlyDto>
+                response = new Response<AuthorUpdateDto>
                 {
-                    Data = data,
+                    Data = mapper.Map<AuthorUpdateDto>(data),
                     Success = true
                 };
             }
             catch (ApiException apiException)
             {
-                response = ConvertApiException<AuthorReadOnlyDto>(apiException);
+                response = ConvertApiException<AuthorUpdateDto>(apiException);
             }
+            
             return response;
         }
     }

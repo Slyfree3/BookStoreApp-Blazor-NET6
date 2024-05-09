@@ -1,4 +1,4 @@
-﻿@page "/authors/update/{Id}"
+﻿@page "/authors/update/{Id:int}"
 @inject IAuthorService authorService
 @inject NavigationManager navManager
 
@@ -42,15 +42,13 @@
     [Parameter]
     public int Id { get; set; }
     private AuthorUpdateDto Author = new AuthorUpdateDto();
-
     protected override async Task OnInitializedAsync()
     {
-        var response = await authorService.GetAuthors(Id);
+        var response = await authorService.GetAuthorForUpdate(Id);
         if (response.Success)
         {
             Author = response.Data;
         }
-        
     }
 
     private async Task HandleUpdateAuthor()
