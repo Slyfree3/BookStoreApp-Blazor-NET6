@@ -15,7 +15,7 @@ namespace BookStoreApp.Blazor.Server.UI.Services
             this.mapper = mapper;
         }
 
-        public async Task<Response<int>> CreateAuthor(AuthorCreateDto author)
+        public async Task<Response<int>> Create(AuthorCreateDto author)
         {
             Response<int> response = new();
 
@@ -31,7 +31,7 @@ namespace BookStoreApp.Blazor.Server.UI.Services
             return response;
         }
 
-        public async Task<Response<List<AuthorReadOnlyDto>>> GetAuthors()
+        public async Task<Response<List<AuthorReadOnlyDto>>> Get()
         {
             Response<List<AuthorReadOnlyDto>> response;
 
@@ -52,15 +52,15 @@ namespace BookStoreApp.Blazor.Server.UI.Services
             return response;
         }
 
-        public async Task<Response<AuthorReadOnlyDto>> GetAuthors(int id)
+        public async Task<Response<AuthorDetailsDto>> Get(int id)
         {
-            Response<AuthorReadOnlyDto> response;
+            Response<AuthorDetailsDto> response;
 
             try
             {
                 await GetBearerToken();
                 var data = await client.AuthorsGETAsync(id);
-                response = new Response<AuthorReadOnlyDto>
+                response = new Response<AuthorDetailsDto>
                 {
                     Data = data,
                     Success = true
@@ -68,12 +68,12 @@ namespace BookStoreApp.Blazor.Server.UI.Services
             }
             catch (ApiException apiException)
             {
-                response = ConvertApiException<AuthorReadOnlyDto>(apiException);
+                response = ConvertApiException<AuthorDetailsDto>(apiException);
             }
             return response;
         }
 
-        public async Task<Response<int>> EditAuthor(int id, AuthorUpdateDto author)
+        public async Task<Response<int>> Edit(int id, AuthorUpdateDto author)
         {
             Response<int> response = new();
 
@@ -89,7 +89,7 @@ namespace BookStoreApp.Blazor.Server.UI.Services
             return response;
         }
 
-        public async Task<Response<AuthorUpdateDto>> GetAuthorForUpdate(int id)
+        public async Task<Response<AuthorUpdateDto>> GetForUpdate(int id)
         {
             Response<AuthorUpdateDto> response;
 
@@ -108,6 +108,22 @@ namespace BookStoreApp.Blazor.Server.UI.Services
                 response = ConvertApiException<AuthorUpdateDto>(apiException);
             }
             
+            return response;
+        }
+
+        public async Task<Response<int>> Delete(int id)
+        {
+            Response<int> response = new();
+
+            try
+            {
+                await GetBearerToken();
+                await client.AuthorsDELETEAsync(id);
+            }
+            catch (ApiException apiException)
+            {
+                response = ConvertApiException<int>(apiException);
+            }
             return response;
         }
     }

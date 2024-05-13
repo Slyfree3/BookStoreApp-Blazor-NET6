@@ -23,25 +23,47 @@
             <ValidationMessage For="@(() => Author.Bio)" />
         </div>
         <br />
-
-        <button @onclick="GoToEditAuthor" class="btn btn-outline-secondary">
-            Edit Authour
-        </button>
-        
-        <button @onclick="BackToList" class="btn btn-outline-secondary">
-            Back To List
-        </button>
     </fieldset>
+    @if (Author.Books == null || Author.Books.Any() == false)
+    {
+        <div class="alert alert-dismissible alert-secondary">
+            No Books for this Author.
+        </div>
+    }
+    else
+    {
+        foreach (var book in Author.Books)
+        {
+            <div class="card" style="width: 18rem;">
+                <img src="@book.Image" class="card-img-top" alt="@book.Title">
+                <div class="card-body">
+                    <h5 class="card-title">@book.Title - @book.Price.ToString("C")</h5>
+                    <p class="card-text"></p>
+                    <a href="#" class="btn btn-primary">View Book</a>
+                </div>
+            </div>
+        }
+    }
+
+    <button @onclick="GoToEditAuthor" class="btn btn-outline-secondary">
+        Edit Author
+    </button>
+    
+    <button @onclick="BackToList" class="btn btn-outline-secondary">
+        <span class="oi oi-media-skip-backward"></span>
+        Back To List
+    </button>
 </EditForm>
 
 @code{
 
     [Parameter]
     public int Id { get; set; }
-    private AuthorUpdateDto Author = new AuthorUpdateDto();
+    private AuthorDetailsDto Author = new();
+
     protected override async Task OnInitializedAsync()
     {
-        var response = await authorService.GetAuthorForUpdate(Id);
+        var response = await authorService.Get(Id);
         if (response.Success)
         {
             Author = response.Data;

@@ -1,5 +1,6 @@
 ﻿@page "/authors/"
 @inject IAuthorService authorService
+@inject IJSRuntime js
 
 <h3>Index</h3>
 
@@ -36,9 +37,9 @@ else
                         <td>@author.FirstName</td>
                         <td>@author.LastName</td>
                         <td>
-                            <a href="/authors/details"><span class="oi oi-book" aria-hidden="true"></span>Detail</a>
-                            <a href="/authors/update/@author.Id"><span class="oi oi-pencil" aria-hidden="true"></span>Edit</a>
-                            <a href="/authors/delete"><span class="oi oi-delete" aria-hidden="true"></span>Delete</a>
+                            <a class="btn btn-primary" href="/authors/details/@author.Id"><span class="oi oi-book" aria-hidden="true"></span> Detail</a>
+                            <a class="btn btn-warning"  href="/authors/update/@author.Id"><span class="oi oi-pencil" aria-hidden="true"></span> Edit </a>
+                            <button class="btn btn-danger" @onclick="@(() => Delete(@author.Id))"><span class="oi oi-delete" aria-hidden="true"></span> Delete </button>
                         </td>
                     </tr>
                 }
@@ -55,10 +56,25 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        response = await authorService.GetAuthors();
+        response = await authorService.Get();
         if (response.Success)
         {
             Authors = response.Data;
         }
+    }
+
+    private async Task Delete(int authorId)
+    {
+        var author = Authors.First(q => q.Id == authorId);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Are you want to delete {author.FirstName} {author.LastName} ?");
+        if (confirm)
+        {
+            var response = await authorService.Delete(authorId);
+            if (response.Success)
+            {
+                await OnInitializedAsync();
+            }
+        }
+
     }
 }

@@ -25,7 +25,7 @@
         <ValidationMessage For="@(() => Author.Bio)" />
     </div>
     <br />
-
+     
     <button class="btn btn-primary" type="submit">
         <span class="oi oi-pencil"></span>
         Create Author
@@ -44,7 +44,7 @@
     private AuthorUpdateDto Author = new AuthorUpdateDto();
     protected override async Task OnInitializedAsync()
     {
-        var response = await authorService.GetAuthorForUpdate(Id);
+        var response = await authorService.GetForUpdate(Id);
         if (response.Success)
         {
             Author = response.Data;
@@ -53,7 +53,7 @@
 
     private async Task HandleUpdateAuthor()
     {
-        var response = await authorService.EditAuthor(Id, Author);
+        var response = await authorService.Edit(Id, Author);
         if (response.Success)
         {
             BackToList();
